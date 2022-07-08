@@ -7,14 +7,17 @@ import numpy as np
 from skimage import measure
 
 # iamge preprocessing function
-def pre_process_img(image, skip_dilate: bool=True):
+def pre_process_img(image: np.ndarray, skip_dilate: bool=True):
     """
     Uses a Guassian Blurring function, adaptive thresholding, and dilating
     to expose the main features of an image (puzzle in this case)
     """
 
+    # converting the image to greyscale
+    grey = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
     # applying the blur
-    proc = cv2.GaussianBlur(image.copy(), (9, 9), 0)
+    proc = cv2.GaussianBlur(grey, (9, 9), 0)
 
     # adaptive threshold using 11 nearest neighbor pixels
     proc = cv2.adaptiveThreshold(
@@ -108,4 +111,25 @@ def crop_and_warp(image, crop_rect):
         dtype = "float32"
     )
 
-    # gets the transformation matrix
+    # gets the transformation matrix for skewing image to a square
+    # by comparing the 4 before and after points
+    m = cv2.getPerspectiveTransform(src, dst)
+
+    # performs the transformation on the image
+    warp = cv2.warpPerspective(image, m, (int(side), int(side)))
+    return warp
+
+def remove_extra(image: np.ndarray):
+
+    h, w = image.shape
+
+    h10 = int(h/10)
+    w10 = int(w/10)
+
+    # make a copy
+    image_copy = np.array(image)
+
+    image_copy = image_copy[h10:, w10:]
+    image_copy = image_copy[:-h10, :-w10]
+
+    return image_copy
