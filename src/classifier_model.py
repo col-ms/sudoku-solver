@@ -1,7 +1,7 @@
 import torch
 
 def smart_classify(
-        resized, net, threshold = 75, device = "cuda",
+        resized, net, threshold = 75, device = "cpu",
         conf_threshold = 0.9, debug = False):
     """
     First, determine whether cell is empty or not by

@@ -1,11 +1,11 @@
 import torchvision
 import torch.nn as nn
 
-def get_model(model_name, pretrained = False):
+def get_model(model_name):
     
     if model_name == "resnet50":
 
-        net = torchvision.models.resnet50(pretrained = pretrained)
+        net = torchvision.models.resnet50(weights = None)
 
         # change first layer to use on greyscale images
         net.conv1 = nn.Conv2d(
@@ -20,7 +20,7 @@ def get_model(model_name, pretrained = False):
 
     if model_name == "resnet101":
 
-        net = torchvision.models.resnet101(pretrained = pretrained)
+        net = torchvision.models.resnet101(weights = None)
 
         # change first layer to use on greyscale images
         net.conv1 = nn.Conv2d(
