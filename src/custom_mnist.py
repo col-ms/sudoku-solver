@@ -45,14 +45,17 @@ class PrintedMNIST(Dataset):
         self.random_state = random_state
         self.transform = transform
 
-        fonts_folder = "fonts"
-
-        self.fonts = glob.glob(fonts_folder + "/*.ttf")
+        # fonts_folder = "../fonts"
+        # self.fonts = glob.glob(fonts_folder + "/*.ttf")
+        # self.fonts = "../fonts/Helvetica-Bold-Font.ttf"
 
         random.seed(random_state)
 
     def __len__(self):
         return self.N
+
+    def __fonts__(self):
+        return self.fonts
 
     def __getitem__(self, idx):
 
@@ -74,7 +77,7 @@ class PrintedMNIST(Dataset):
         y = random.randint(30, 90)
 
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype(random.choice(self.fonts), size)
+        font = ImageFont.truetype("arial.ttf", size)
         draw.text((x, y), str(target), color, font = font)
 
         img = img.resize((28, 28), Image.BILINEAR)
